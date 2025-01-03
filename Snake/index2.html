@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game 2.0</title>
+</head>
+<body>
+    <div id="points">0 Points</div>
+    <canvas id="gameCanvas" height="400px" width="400px"></canvas>
+</body>
+<script>
+    //Constant variables
+    const BORDER_COLOR = "black";
+    const BACKGROUND_COLOR = "white";
+    const SNAKE_BORDER_COLOR = "darkblue";
+    const SNAKE_COLOR = "blue";
+    const FOOD_COLOR = "red";
+    const FOOD_BORDER_COLOR = "darkred";
+
+    //GameCanvas
+    const gameCanvas = document.getElementById("gameCanvas");
+    const pointsDisplay = document.getElementById("points");
+    const ctx = gameCanvas.getContext("2d");
+
+    //Snake
+    let snake = [
+        {x: 150, y: 150},
+        {x: 140, y: 150},
+        {x: 130, y: 150},
+        {x: 120, y: 150},
+        {x: 110, y: 150},
+    ];
+    let dx = 10, dy = 0;
+    let foodX, foodY;
+    let points = 0;
+
+    document.addEventListener("keydown", changeDirection);
+    //Main
+    function main(){
+        if(gameEnded()) return;
+        setTimeout(function onTick(){
+            clearCanvas();
+            //console.log(snake);
+            moveSnake();
+            //console.log("moved the snake");
+            //console.log(snake);
+            if(foodEaten()){
+                points++;
+                updatePoints();
+                generateFood();
+            }
+            drawFood();
+            drawSnake();
+            main();
+        }, 100);
+    }
+
+    //Canvas
+    function clearCanvas(){
+        ctx.fillStyle = BACKGROUND_COLOR;
+        ctx.strokeStyle = BORDER_COLOR;
+
+        ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+        ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
+    }
+
+    //Snake
+    //Drawing the Snake
+    function drawSnake(){
+        snake.forEach(drawSnakePart);
+    }
+    function drawSnakePart(snakePart){
+        ctx.fillStyle = SNAKE_COLOR;
+        ctx.strokeStyle = SNAKE_BORDER_COLOR;
+
+        ctx.fillRect(snakePart.x, snakePart.y, 10, 10);
+        ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);
+    }
+    //Moving the Snake
+    function moveSnake(){
+        const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+        snake.unshift(head);
+        if(!foodEaten()){
+            snake.pop();
+        }
+    }
+    //Changing the direction of the Snake
+    function changeDirection(event){
+        const LEFT_KEY = 37;
+        const RIGHT_KEY = 39;
+        const UP_KEY = 38;
+        const DOWN_KEY = 40;
+
+        const goingLeft = dx === -10;
+        const goingRight = dx === 10;
+        const goingUp = dy === -10;
+        const goingDown = dy === 10;
+
+        const keyPressed = event.keyCode;
+
+        if(keyPressed == LEFT_KEY && !goingRight){
+            dx = -10;
+            dy = 0;
+        }
+        if(keyPressed == RIGHT_KEY && !goingLeft){
+            dx = 10;
+            dy = 0;
+        }
+        if(keyPressed == UP_KEY && !goingDown){
+            dy = -10;
+            dx = 0;
+        }
+        if(keyPressed == DOWN_KEY && !goingUp){
+            dy = 10;
+            dx = 0;
+        }
+    }
+
+    //Food
+    //Generate Food
+    function generateFood(){
+        foodX = Math.round(Math.random()*gameCanvas.width/10)*10;
+        foodY= Math.round(Math.random()*gameCanvas.height/10)*10;
+
+        console.log("Generated food", foodX, foodY);
+    }
+    function drawFood(){
+        ctx.fillStyle = FOOD_COLOR;
+        ctx.strokeStyle = FOOD_BORDER_COLOR;
+
+        ctx.fillRect(foodX, foodY, 10, 10);
+        ctx.strokeRect(foodX, foodY, 10, 10);
+
+        console.log("drawing Food");
+    }
+    function foodEaten(){
+        return foodX === snake[0].x && foodY === snake[0].y;
+    }
+
+    //Game
+    //Game ended
+    function gameEnded(){
+        for(let i=1; i<snake.length; i++){
+            const collided = snake[0].x === snake[i].x && snake[0].y === snake[i].y;
+            if(collided){
+                /*console.log("The snake collided with itself");
+                console.log(snake[0].x);
+                console.log(snake[i].x);
+                console.log(snake[0].y);
+                console.log(snake[i].y);
+                console.log(i);*/
+                return true;
+            }
+        }
+        const collidedLeft = snake[0].x < 10;
+        const collidedRight = snake[0].x >= gameCanvas.width;
+        const collidedTop = snake[0].y < 0;
+        const collidedBottom = snake[0].y >= gameCanvas.height;
+
+        return collidedLeft || collidedBottom || collidedRight || collidedTop;
+    }
+    function updatePoints(){
+        pointsDisplay.innerHTML = points + " Points";
+    }
+
+    
+    main();
+    generateFood();
+</script>
+</html>
