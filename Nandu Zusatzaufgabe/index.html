@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nandu</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <script>
+        let seite = 1;
+    </script>
+    <div class="header"><div class="ueberschrift"><p>Nandu Zusatzaufgabe<hr></div></p></div>
+    <div class="main">
+        <div class="text" id="text">
+            <div id="titel">
+                <p>Gebe bitte die Größe deiner Konstruktion und die Anzahl der Lampen und LEDs ein:</p>
+            </div>
+            <div class="flex-box">
+                <div id="content">
+                    <p>Breite:</p> 
+                    <p><textarea name="breite" id="n" cols="10" rows="1" maxlength="10" placeholder="10"></textarea></p>
+                    <p>Höhe: </p>
+                    <p><textarea name="hoehe" id="m" cols="10" rows="1" maxlength="10" placeholder="10"></textarea></p>
+                    <p>Lampenanzahl: </p>
+                    <p><textarea name="lampen" id="lampen" cols="10" rows="1" maxlength="10" placeholder="10"></textarea></p>
+                    <p>LED-Anzahl: </p>
+                    <p><textarea name="led" id="led" cols="10" rows="1" maxlength="10" placeholder="10"></textarea></p>
+                </div>
+                <div class="vl"></div>
+                <div class="grid" id="grid">
+                    <p>Hier wird deine aktuelle Konstruktion angezeigt.</p>
+                </div>
+            </div>
+        </div>
+        <div class="buttons">
+            <button onclick="aktualisieren()">Neustarten</button>
+            <button onclick="weiter()">Weiter</button>
+        </div>
+    </div>
+    <div class="main2" id="main2">
+        <div id="seite2">        
+            <div class="text2" id="text2"> 
+            </div>
+        </div>
+        <div class="buttons">
+            <button id="links" onclick="null_eins()">1/0</button>
+            <button id="links" onclick="buchstaben()">an/aus</button>
+        </div>
+    </div>
+    <script>
+        let elemt = document.getElementById("main2");
+        elemt.style.display = 'none';
+    </script>
+</body>
+</html>
